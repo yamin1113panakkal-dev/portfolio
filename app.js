@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPrintCV();
     initWorksGallery();
     initContactForm();
+    initProfileTilt();
 });
 
 /* ==========================================================================
@@ -387,5 +388,48 @@ function initPrintCV() {
                 window.print();
             });
         }
+    });
+}
+
+/* ==========================================================================
+   3D Tilt & Parallax Glow Effect for Profile Picture
+   ========================================================================== */
+function initProfileTilt() {
+    const container = document.getElementById('profile-container');
+    const card = document.getElementById('profile-card');
+    const glow = document.getElementById('profile-glow');
+
+    if (!container || !card || !glow) return;
+
+    // Skip tilt on touch devices for mobile accessibility and performance
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouch) return;
+
+    container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        
+        // Find cursor coordinate distance relative to container center
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        const normX = x / rect.width;
+        const normY = y / rect.height;
+
+        // Compute degree rotations (cap at max 15 degrees)
+        const rotateX = -(normY * 15).toFixed(2);
+        const rotateY = (normX * 15).toFixed(2);
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        
+        // Move background glow parallax opposite of cursor direction
+        const glowX = (normX * 25).toFixed(1);
+        const glowY = (normY * 25).toFixed(1);
+        glow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px)) scale(1.08)`;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        // Return styles to zero offset
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        glow.style.transform = 'translate(-50%, -50%) scale(1)';
     });
 }
