@@ -121,7 +121,7 @@ const DEFAULT_WORKS = [
         category: 'wordpress',
         categoryName: 'WordPress Website',
         desc: 'Designed a responsive, WooCommerce-integrated e-commerce website on WordPress. Features custom page templates, search filters, and smooth mobile checkouts.',
-        img: 'assets/campaign_ecom.jpg'
+        img: 'campaign_ecom.jpg'
     },
     {
         id: 'default-logo',
@@ -129,7 +129,7 @@ const DEFAULT_WORKS = [
         category: 'logo',
         categoryName: 'Logo Design',
         desc: 'Developed a custom modern minimalist logo design for a premium physical coaching center using Adobe Illustrator. Vector files fully scaled.',
-        img: 'assets/campaign_saas.jpg'
+        img: 'campaign_saas.jpg'
     },
     {
         id: 'default-poster',
@@ -137,7 +137,7 @@ const DEFAULT_WORKS = [
         category: 'poster',
         categoryName: 'Social Poster',
         desc: 'Created an engaging, eye-catching promotional poster design for a retail boutique launch campaign. Run as part of 5 months freelance graphics operations.',
-        img: 'assets/campaign_seo.jpg'
+        img: 'campaign_seo.jpg'
     },
     {
         id: 'default-seo',
@@ -145,7 +145,7 @@ const DEFAULT_WORKS = [
         category: 'seo',
         categoryName: 'SEO Campaign',
         desc: 'Optimized search rankings by restructuring site metadata structure, performing on-page keyword density sweeps, and tracking search impressions.',
-        img: 'assets/campaign_seo.jpg'
+        img: 'campaign_seo.jpg'
     }
 ];
 
