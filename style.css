@@ -123,15 +123,24 @@ ul {
     list-style: none;
 }
 
-button, input, textarea {
+button, input, textarea, select {
     font-family: inherit;
-    outline: none;
 }
 
 button {
     cursor: pointer;
     border: none;
     background: none;
+}
+
+/* Accessibility Focus States */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--accent-primary) !important;
+    outline-offset: 3px !important;
 }
 
 /* Utility Containers */
@@ -168,7 +177,7 @@ section:last-of-type {
 
 .section-header h2 {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 4vw + 1rem, 2.5rem);
     font-weight: 800;
     color: var(--text-primary);
 }
@@ -403,7 +412,7 @@ html[data-theme="light"] .icon-moon { display: block; }
 
 .hero-text h1 {
     font-family: var(--font-heading);
-    font-size: 3.5rem;
+    font-size: clamp(2.2rem, 5vw + 1rem, 3.5rem);
     font-weight: 800;
     line-height: 1.15;
     margin-bottom: 24px;
@@ -1021,7 +1030,7 @@ html[data-theme="light"] .icon-moon { display: block; }
 
 .contact-info-panel h2 {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 4vw + 1rem, 2.5rem);
     font-weight: 800;
     margin-bottom: 16px;
     line-height: 1.2;

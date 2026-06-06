@@ -177,6 +177,17 @@ function initWorksGallery() {
         if (stored) {
             try {
                 works = JSON.parse(stored);
+                // Dynamically update old assets paths to root-level for users with cached storage
+                let updated = false;
+                works.forEach(w => {
+                    if (w.img && w.img.startsWith('assets/')) {
+                        w.img = w.img.replace('assets/', '');
+                        updated = true;
+                    }
+                });
+                if (updated) {
+                    localStorage.setItem('yamin_works', JSON.stringify(works));
+                }
             } catch (e) {
                 works = [...DEFAULT_WORKS];
             }
@@ -204,7 +215,7 @@ function initWorksGallery() {
             
             card.innerHTML = `
                 <div class="gallery-img-box">
-                    <img src="${work.img}" alt="${work.title}" class="gallery-img">
+                    <img src="${work.img}" alt="${work.title}" class="gallery-img" loading="lazy">
                     <span class="gallery-card-badge">${work.categoryName}</span>
                 </div>
                 <div class="gallery-card-info">
