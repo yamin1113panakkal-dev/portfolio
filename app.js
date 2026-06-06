@@ -132,14 +132,14 @@ const DEFAULT_WORKS = [
         desc: 'Developed a custom modern minimalist logo design for a premium physical coaching center using Adobe Illustrator. Vector files fully scaled.',
         img: 'campaign_saas.jpg'
     },
-    {
-        id: 'default-poster',
-        title: 'Summer Event Product Flyer',
-        category: 'poster',
-        categoryName: 'Social Poster',
-        desc: 'Created an engaging, eye-catching promotional poster design for a retail boutique launch campaign. Run as part of 5 months freelance graphics operations.',
-        img: 'campaign_seo.jpg'
-    },
+{
+    id: 'default-poster',
+    title: 'IAMS Digital Marketing Course',
+    category: 'poster',
+    categoryName: 'Social Poster',
+    desc: 'Digital Marketing Course promotional poster for IAMS Campus.',
+    img: 'iams1.jpg'
+},
     {
         id: 'default-seo',
         title: 'CompareTech Search Ranking Hub',
