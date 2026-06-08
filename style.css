@@ -510,10 +510,10 @@ html[data-theme="light"] .icon-moon { display: block; }
 /* Main Name Heading */
 .hero-name-huge {
     font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 5vw + 1.2rem, 4.5rem);
+    font-size: clamp(2.0rem, 4.2vw + 1.0rem, 3.5rem); /* Reduced size for better visual balance */
     font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -1.5px;
+    line-height: 1.1;
+    letter-spacing: -1px;
     color: var(--text-primary);
     margin-bottom: 20px;
     text-transform: uppercase;
