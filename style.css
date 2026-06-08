@@ -408,7 +408,7 @@ html[data-theme="light"] .icon-moon { display: block; }
                 radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.08) 0%, rgba(6, 8, 20, 0) 50%),
                 #060814;
     overflow: hidden;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none; /* Removed hard border to allow custom gradient divider */
 }
 
 .hero-grid-new {
@@ -681,8 +681,8 @@ html[data-theme="light"] .icon-moon { display: block; }
 .hero-image-wrapper-new {
     position: relative;
     width: 100%;
-    max-width: 620px; /* Increased from 520px to make image larger */
-    height: 680px;    /* Increased from 600px to make image taller */
+    max-width: 480px; /* Reduced to fit naturally in hero section */
+    height: 530px;    /* Reduced to fit naturally in hero section */
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -702,10 +702,13 @@ html[data-theme="light"] .icon-moon { display: block; }
     display: block;
     position: relative;
     z-index: 2;
-    /* Silhouette Neon Halo Glow Effect tracing body outline */
-    filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.45)) drop-shadow(0 0 35px rgba(6, 182, 212, 0.25));
+    filter: none; /* Removed background lights and effects as requested */
     transition: transform var(--transition-medium);
     transform: translateZ(10px) translateY(-3%); /* Shift up to overflow top */
+    
+    /* Smooth bottom gradient fade to prevent abrupt crop look */
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
 }
 
 .hero-image-wrapper-new:hover .hero-img-new {
@@ -714,17 +717,7 @@ html[data-theme="light"] .icon-moon { display: block; }
 
 /* Glow Backdrop */
 .hero-image-glow-new {
-    position: absolute;
-    width: 550px;
-    height: 550px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.32) 0%, rgba(6, 182, 212, 0.1) 55%, rgba(0, 0, 0, 0) 70%);
-    filter: blur(60px);
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateZ(-20px);
-    z-index: 1;
-    pointer-events: none;
-    animation: rotateGlowNew 12s infinite alternate ease-in-out;
+    display: none; /* Hidden background glow backdrop as requested */
 }
 
 @keyframes rotateGlowNew {
@@ -975,11 +968,43 @@ html[data-theme="light"] .icon-moon { display: block; }
    Trusted By Clients Logo Slider
    ========================================================================== */
 
+/* Ambient glow divider and top-spotlight for section transition */
+.section-divider-glow {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, 
+        transparent 0%, 
+        rgba(6, 182, 212, 0.3) 25%, 
+        rgba(99, 102, 241, 0.45) 50%, 
+        rgba(6, 182, 212, 0.3) 75%, 
+        transparent 100%
+    );
+    z-index: 20;
+    margin-top: -1px;
+}
+
+.section-divider-glow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 16px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.22) 0%, transparent 75%);
+    filter: blur(8px);
+    z-index: 19;
+    pointer-events: none;
+}
+
 .clients-section-glow {
     padding: 80px 0;
     border-bottom: 1px solid var(--border-color);
     position: relative;
-    background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.04) 0%, rgba(6, 8, 20, 0) 70%);
+    /* Soft cyan spotlight at the top center to blend sections, combined with subtle center-purple */
+    background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.08) 0%, rgba(6, 8, 20, 0) 50%),
+                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.04) 0%, rgba(6, 8, 20, 0) 70%);
     overflow: hidden;
 }
 
