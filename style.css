@@ -1186,6 +1186,59 @@ html[data-theme="light"] .slider-container-glass::after {
    Academic & Freelance Projects
    ========================================================================== */
 
+/* Antigravity Projects Header Styling */
+.projects-header-antigravity {
+    margin-bottom: 60px;
+    text-align: center;
+    position: relative;
+}
+
+.projects-header-antigravity .subtitle-cyan {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.projects-header-antigravity .heading-antigravity {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 5vw + 1.2rem, 3.8rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    filter: drop-shadow(0 2px 15px rgba(6, 182, 212, 0.25));
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+/* Subtle neon glow dot/effect behind heading */
+.projects-header-antigravity::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(59, 130, 246, 0.05) 50%, rgba(0,0,0,0) 100%);
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(20px);
+}
+
 .projects-detail-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
