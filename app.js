@@ -132,14 +132,14 @@ const DEFAULT_WORKS = [
         desc: 'Developed a custom modern minimalist logo design for a premium physical coaching center using Adobe Illustrator. Vector files fully scaled.',
         img: 'campaign_saas.jpg'
     },
-{
-    id: 'default-poster',
-    title: 'IAMS Digital Marketing Course',
-    category: 'poster',
-    categoryName: 'Social Poster',
-    desc: 'Digital Marketing Course promotional poster for IAMS Campus.',
-    img: 'iams1.jpg'
-},
+    {
+        id: 'default-poster',
+        title: 'Summer Event Product Flyer',
+        category: 'poster',
+        categoryName: 'Social Poster',
+        desc: 'Created an engaging, eye-catching promotional poster design for a retail boutique launch campaign. Run as part of 5 months freelance graphics operations.',
+        img: 'campaign_seo.jpg'
+    },
     {
         id: 'default-seo',
         title: 'CompareTech Search Ranking Hub',
@@ -315,27 +315,81 @@ function initWorksGallery() {
             const file = fileInput.files[0];
             const reader = new FileReader();
 
+            // Show loading status on button during compression
+            const submitBtn = uploadForm.querySelector('.btn-submit');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Compressing & Saving...</span>';
+
             reader.onload = function(event) {
-                const newWorkItem = {
-                    id: 'work-' + Date.now(),
-                    title: title,
-                    category: category,
-                    categoryName: categoryName,
-                    desc: desc,
-                    img: event.target.result // Base64 string of the image
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    // Client-side compression settings (max 800px width/height)
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = tempImg.width;
+                    let height = tempImg.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    // Draw image onto canvas to compress it
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(tempImg, 0, 0, width, height);
+
+                    // Compress to JPEG with 0.6 quality (converts large photos from MBs to ~50-100KB)
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+                    const newWorkItem = {
+                        id: 'work-' + Date.now(),
+                        title: title,
+                        category: category,
+                        categoryName: categoryName,
+                        desc: desc,
+                        img: compressedBase64
+                    };
+
+                    try {
+                        works.push(newWorkItem);
+                        localStorage.setItem('yamin_works', JSON.stringify(works));
+                        
+                        // Close, reset, and re-render
+                        closeUploadModal();
+                        
+                        // Select "All Works" filter
+                        filterBtns.forEach(b => b.classList.remove('active'));
+                        document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+                        
+                        renderGallery('all');
+                    } catch (error) {
+                        alert("Storage limit reached! The image is too large or storage is full. Please try a different photo.");
+                        console.error("Local storage quota exceeded:", error);
+                    } finally {
+                        // Reset button state
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
                 };
 
-                works.push(newWorkItem);
-                localStorage.setItem('yamin_works', JSON.stringify(works));
-                
-                // Close and render
-                closeUploadModal();
-                
-                // Select "All Works" filter after new upload
-                filterBtns.forEach(b => b.classList.remove('active'));
-                document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
-                
-                renderGallery('all');
+                tempImg.onerror = function() {
+                    alert("Error loading the image file. Please try a different file.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                };
+
+                tempImg.src = event.target.result;
             };
 
             reader.readAsDataURL(file);
