@@ -416,7 +416,7 @@ html[data-theme="light"] .icon-moon { display: block; }
     margin: 0 auto;
     width: 100%;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1.25fr; /* Allocated 55% width to image visual column */
     gap: 60px;
     align-items: center;
     position: relative;
@@ -602,6 +602,9 @@ html[data-theme="light"] .icon-moon { display: block; }
     border-radius: var(--radius-sm);
     font-weight: 700;
     font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -609,6 +612,19 @@ html[data-theme="light"] .icon-moon { display: block; }
     background-color: var(--bg-surface-hover);
     border-color: var(--accent-secondary);
     transform: translateY(-3px);
+}
+
+.btn-icon-whatsapp {
+    width: 18px;
+    height: 18px;
+    color: #25d366;
+    fill: currentColor;
+    transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.btn-action-secondary-new:hover .btn-icon-whatsapp {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 4px rgba(37, 211, 102, 0.4));
 }
 
 /* Stats Section inline grid */
@@ -665,41 +681,44 @@ html[data-theme="light"] .icon-moon { display: block; }
 .hero-image-wrapper-new {
     position: relative;
     width: 100%;
-    max-width: 520px; /* Increased from 440px to make image larger */
-    height: 600px;    /* Increased from 520px to make image taller */
+    max-width: 620px; /* Increased from 520px to make image larger */
+    height: 680px;    /* Increased from 600px to make image taller */
     display: flex;
     justify-content: center;
     align-items: flex-end;
     z-index: 10;
     transform-style: preserve-3d;
     perspective: 1000px;
+    overflow: visible; /* Allow image to overflow slightly */
     animation: profileEntranceNew 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.2s;
 }
 
 .hero-img-new {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Contain the transparent PNG cutout */
+    width: auto;
+    height: 106%; /* Let it overflow 6% outside wrapper height */
+    max-width: none;
+    object-fit: contain; /* Contain transparent PNG cutout */
     display: block;
     position: relative;
     z-index: 2;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+    /* Silhouette Neon Halo Glow Effect tracing body outline */
+    filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.45)) drop-shadow(0 0 35px rgba(6, 182, 212, 0.25));
     transition: transform var(--transition-medium);
-    transform: translateZ(10px);
+    transform: translateZ(10px) translateY(-3%); /* Shift up to overflow top */
 }
 
 .hero-image-wrapper-new:hover .hero-img-new {
-    transform: translateZ(25px) scale(1.02);
+    transform: translateZ(25px) translateY(-3%) scale(1.02);
 }
 
 /* Glow Backdrop */
 .hero-image-glow-new {
     position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, rgba(6, 182, 212, 0.08) 55%, rgba(0, 0, 0, 0) 70%);
-    filter: blur(55px);
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.32) 0%, rgba(6, 182, 212, 0.1) 55%, rgba(0, 0, 0, 0) 70%);
+    filter: blur(60px);
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%) translateZ(-20px);
@@ -796,34 +815,44 @@ html[data-theme="light"] .icon-moon { display: block; }
 
 /* Positions of floating cards and bobbing speeds */
 .card-top-left {
-    top: 15%;
-    left: -40px;
+    top: 12%;
+    left: -30px;
     animation: bobbingCard1 6s infinite ease-in-out;
     transform: translateZ(30px);
 }
 
-.card-bottom-right {
-    bottom: 12%;
-    right: -25px;
+.card-top-right {
+    top: 24%;
+    right: -30px;
     animation: bobbingCard2 7s infinite ease-in-out;
     transform: translateZ(40px);
 }
 
 .card-middle-left {
-    top: 52%;
-    left: -65px;
+    top: 55%;
+    left: -50px;
     animation: bobbingCard3 8s infinite ease-in-out;
     transform: translateZ(35px);
+}
+
+.card-bottom-right {
+    bottom: 8%;
+    right: -15px;
+    animation: bobbingCard4 9s infinite ease-in-out;
+    transform: translateZ(45px);
 }
 
 .floating-card-new.card-top-left:hover {
     transform: translateZ(50px) scale(1.05);
 }
-.floating-card-new.card-bottom-right:hover {
+.floating-card-new.card-top-right:hover {
     transform: translateZ(60px) scale(1.05);
 }
 .floating-card-new.card-middle-left:hover {
     transform: translateZ(55px) scale(1.05);
+}
+.floating-card-new.card-bottom-right:hover {
+    transform: translateZ(65px) scale(1.05);
 }
 
 @keyframes bobbingCard1 {
@@ -839,6 +868,11 @@ html[data-theme="light"] .icon-moon { display: block; }
 @keyframes bobbingCard3 {
     0%, 100% { transform: translateY(0) translateZ(35px); }
     50% { transform: translateY(-10px) translateZ(35px); }
+}
+
+@keyframes bobbingCard4 {
+    0%, 100% { transform: translateY(0) translateZ(45px); }
+    50% { transform: translateY(12px) translateZ(45px); }
 }
 
 @keyframes profileEntranceNew {
@@ -935,6 +969,139 @@ html[data-theme="light"] .icon-moon { display: block; }
 @keyframes profileEntrance {
     0% { transform: scale(0.92) rotateY(10deg); opacity: 0; }
     100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+}
+
+/* ==========================================================================
+   Trusted By Clients Logo Slider
+   ========================================================================== */
+
+.clients-section-glow {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.04) 0%, rgba(6, 8, 20, 0) 70%);
+    overflow: hidden;
+}
+
+.slider-container-glass {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+    background: rgba(13, 17, 39, 0.2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-glow);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient masking overlays for left and right edges to fade logos in/out */
+.slider-container-glass::before,
+.slider-container-glass::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 120px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.slider-container-glass::before {
+    left: 0;
+    background: linear-gradient(to right, #060814 0%, rgba(6, 8, 20, 0) 100%);
+}
+
+.slider-container-glass::after {
+    right: 0;
+    background: linear-gradient(to left, #060814 0%, rgba(6, 8, 20, 0) 100%);
+}
+
+html[data-theme="light"] .slider-container-glass::before {
+    background: linear-gradient(to right, #f8fafc 0%, rgba(248, 250, 252, 0) 100%);
+}
+
+html[data-theme="light"] .slider-container-glass::after {
+    background: linear-gradient(to left, #f8fafc 0%, rgba(248, 250, 252, 0) 100%);
+}
+
+.logo-track-wrap {
+    overflow: hidden;
+    width: 100%;
+}
+
+.logo-track {
+    display: flex;
+    width: max-content;
+    gap: 40px;
+    animation: infiniteScroll 22s linear infinite;
+}
+
+/* Pause animation on hover */
+.logo-track-wrap:hover .logo-track {
+    animation-play-state: paused;
+}
+
+@keyframes infiniteScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Translate by exactly half the width of the track (since the second half is duplicate) plus gap correction */
+        transform: translateX(calc(-50% - 20px));
+    }
+}
+
+/* Logo Card Styling */
+.logo-card {
+    width: 180px;
+    height: 90px;
+    background-color: #ffffff;
+    border-radius: var(--radius-md); /* 16px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform var(--transition-medium), box-shadow var(--transition-medium), border-color var(--transition-fast);
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    cursor: pointer;
+}
+
+.logo-card img {
+    max-height: 46px;
+    max-width: 100%;
+    object-fit: contain; /* scale to fit maintaining aspect ratio */
+    filter: grayscale(100%);
+    opacity: 0.85;
+    transition: filter var(--transition-fast), opacity var(--transition-fast);
+    display: block;
+}
+
+.logo-card:hover img {
+    filter: grayscale(0%);
+    opacity: 1;
+}
+
+.logo-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+    border-color: var(--accent-primary);
+}
+
+/* Fallback stylized text logo inside the card */
+.fallback-logo {
+    display: none;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    letter-spacing: -0.5px;
 }
 
 /* ==========================================================================
@@ -1382,6 +1549,29 @@ html[data-theme="light"] .icon-moon { display: block; }
     align-items: center;
     gap: 16px;
     box-shadow: var(--card-glow);
+    position: relative;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.method-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.12);
+}
+
+.method-card.whatsapp-card:hover {
+    border-color: #25d366;
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.15);
+}
+
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
 }
 
 .method-icon {
@@ -1394,6 +1584,12 @@ html[data-theme="light"] .icon-moon { display: block; }
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: filter var(--transition-fast);
+}
+
+.method-icon.whatsapp-icon {
+    background-color: rgba(37, 211, 102, 0.1);
+    color: #25d366;
 }
 
 .method-icon svg {
@@ -1414,10 +1610,15 @@ html[data-theme="light"] .icon-moon { display: block; }
     font-weight: 600;
     color: var(--text-primary);
     font-size: 0.95rem;
+    transition: color var(--transition-fast);
 }
 
-.method-card a:hover {
+.method-card:hover a {
     color: var(--accent-primary);
+}
+
+.method-card.whatsapp-card:hover a {
+    color: #25d366;
 }
 
 /* Form Styles */
@@ -2263,6 +2464,11 @@ html[data-theme="light"] .icon-moon { display: block; }
         padding: 60px 0;
     }
 
+    .slider-container-glass::before,
+    .slider-container-glass::after {
+        width: 50px;
+    }
+
     .nav-links {
         display: none;
     }
@@ -2310,6 +2516,11 @@ html[data-theme="light"] .icon-moon { display: block; }
     .card-top-left {
         left: -20px;
         top: 10%;
+    }
+
+    .card-top-right {
+        right: -20px;
+        top: 28%;
     }
 
     .card-bottom-right {
@@ -2386,6 +2597,10 @@ html[data-theme="light"] .icon-moon { display: block; }
 
     .card-top-left {
         left: -15px;
+    }
+
+    .card-top-right {
+        right: -15px;
     }
 
     .card-bottom-right {

@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMetricCounters();
     initPrintCV();
     initWorksGallery();
+    initClientSlider();
     initContactForm();
     initProfileTilt();
 });
@@ -600,6 +601,213 @@ function initWorksGallery() {
     // Init Gallery execution
     loadWorks();
     renderGallery('all');
+}
+
+/* ==========================================================================
+   Dynamic Clients Slider Management System
+   ========================================================================== */
+
+const DEFAULT_CLIENTS = [
+    { id: 'c-default-1', name: 'ApexCommerce', img: '' },
+    { id: 'c-default-2', name: 'GrowthSaaS', img: '' },
+    { id: 'c-default-3', name: 'NetAgency', img: '' },
+    { id: 'c-default-4', name: 'PixelStudio', img: '' },
+    { id: 'c-default-5', name: 'RankSEO', img: '' },
+    { id: 'c-default-6', name: 'MetaAds', img: '' }
+];
+
+function initClientSlider() {
+    const track = document.getElementById('logo-track-inner');
+    const addClientTrigger = document.getElementById('add-client-trigger');
+    const clientModal = document.getElementById('client-upload-modal');
+    const clientCloseBtn = document.getElementById('client-close-btn');
+    const clientForm = document.getElementById('upload-client-form');
+
+    if (!track) return;
+
+    let clients = [];
+
+    // Load clients from localStorage or default
+    function loadClients() {
+        const stored = localStorage.getItem('yamin_clients');
+        if (stored) {
+            try {
+                clients = JSON.parse(stored);
+            } catch (e) {
+                clients = [...DEFAULT_CLIENTS];
+            }
+        } else {
+            clients = [...DEFAULT_CLIENTS];
+            localStorage.setItem('yamin_clients', JSON.stringify(clients));
+        }
+    }
+
+    // Helper to create a single card DOM element
+    function createCardElement(client) {
+        const card = document.createElement('div');
+        card.className = 'logo-card';
+        card.setAttribute('data-id', client.id);
+
+        const img = document.createElement('img');
+        img.alt = `${client.name} Brand Logo`;
+        img.loading = 'lazy';
+        
+        const fallback = document.createElement('span');
+        fallback.className = 'fallback-logo';
+        fallback.textContent = client.name;
+
+        // Onerror handler to show text fallback if no image is uploaded
+        img.onerror = () => {
+            img.style.display = 'none';
+            fallback.style.display = 'block';
+        };
+
+        if (client.img && client.img.trim() !== '') {
+            img.src = client.img;
+            fallback.style.display = 'none';
+            img.style.display = 'block';
+        } else {
+            img.style.display = 'none';
+            fallback.style.display = 'block';
+        }
+
+        card.appendChild(img);
+        card.appendChild(fallback);
+        return card;
+    }
+
+    // Render client logos inside track and duplicate to ensure infinite looping marquee
+    function renderSlider() {
+        track.innerHTML = '';
+        
+        if (clients.length === 0) return;
+
+        // Render first set
+        clients.forEach(c => {
+            track.appendChild(createCardElement(c));
+        });
+
+        // Duplicate set for seamless looping (must repeat elements)
+        clients.forEach(c => {
+            track.appendChild(createCardElement(c));
+        });
+    }
+
+    // --- Modal Event Listeners ---
+    if (addClientTrigger && clientModal) {
+        addClientTrigger.addEventListener('click', () => {
+            clientModal.classList.add('open');
+            clientModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('no-scroll');
+        });
+    }
+
+    function closeClientModal() {
+        if (clientModal) {
+            clientModal.classList.remove('open');
+            clientModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('no-scroll');
+            clientForm.reset();
+        }
+    }
+
+    if (clientCloseBtn) clientCloseBtn.addEventListener('click', closeClientModal);
+    if (clientModal) {
+        clientModal.addEventListener('click', (e) => {
+            if (e.target === clientModal) closeClientModal();
+        });
+    }
+
+    // File compression using Canvas helper
+    function compressImage(file, maxWidth, maxHeight, quality) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    let width = tempImg.width;
+                    let height = tempImg.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(tempImg, 0, 0, width, height);
+
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedBase64);
+                };
+                tempImg.onerror = reject;
+                tempImg.src = event.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Form submission processing
+    if (clientForm) {
+        clientForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const brandName = document.getElementById('client-brand-name').value;
+            const logoInput = document.getElementById('client-brand-logo');
+
+            if (logoInput.files.length === 0) return;
+
+            const submitBtn = clientForm.querySelector('.btn-submit');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Uploading...</span>';
+
+            // Compress to maximum width 360px and height 180px for logos (keeps size small in localStorage)
+            compressImage(logoInput.files[0], 360, 180, 0.7)
+                .then(compressedLogo => {
+                    const newClient = {
+                        id: 'client-' + Date.now(),
+                        name: brandName,
+                        img: compressedLogo
+                    };
+
+                    try {
+                        clients.push(newClient);
+                        localStorage.setItem('yamin_clients', JSON.stringify(clients));
+                        
+                        // Close modal and re-render
+                        closeClientModal();
+                        renderSlider();
+                    } catch (err) {
+                        alert("Storage quota exceeded! Please remove some client logos or upload a smaller file.");
+                        console.error("Storage quota full:", err);
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                })
+                .catch(err => {
+                    alert("Error processing the logo image. Please try again.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    console.error("Logo upload compression error:", err);
+                });
+        });
+    }
+
+    // Init slider track rendering
+    loadClients();
+    renderSlider();
 }
 
 /* ==========================================================================
