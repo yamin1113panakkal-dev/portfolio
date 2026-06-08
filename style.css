@@ -665,8 +665,8 @@ html[data-theme="light"] .icon-moon { display: block; }
 .hero-image-wrapper-new {
     position: relative;
     width: 100%;
-    max-width: 440px;
-    height: 520px; /* 60-70% height on desktop */
+    max-width: 520px; /* Increased from 440px to make image larger */
+    height: 600px;    /* Increased from 520px to make image taller */
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -680,13 +680,11 @@ html[data-theme="light"] .icon-moon { display: block; }
 .hero-img-new {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* Contain the transparent PNG cutout */
     display: block;
     position: relative;
     z-index: 2;
-    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.6));
-    border-radius: 200px 200px 0 0; /* Arch cutout style */
-    border-bottom: 3px solid var(--accent-primary);
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     transition: transform var(--transition-medium);
     transform: translateZ(10px);
 }
